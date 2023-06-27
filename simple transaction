@@ -1,0 +1,13 @@
+from web3 import Web3
+from web3.middleware import geth_poa_middleware
+
+w3 = Web3(Web3.HTTPProvider("https://goerli.infura.io/v3/YOUR_INFURA_KEY"))
+w3.middleware_onion.inject(geth_poa_middleware, layer=0)
+
+transaction = contract.functions.function_Name(params).build_transaction()
+transaction.update({'gas': appropriate_gas_amount})
+transaction.update({'nonce': w3.eth.get_transaction_count('Your_Wallet_Address')})
+
+signed_tx = w3.eth.account.sign_transaction(transaction, private_key)
+txn_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+txn_receipt = w3.eth.wait_for_transaction_receipt(txn_hash)
